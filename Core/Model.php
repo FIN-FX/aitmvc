@@ -4,10 +4,17 @@ namespace Core;
 
 use \Common\Router as Router;
 
+/**
+ * Main Model class
+ *
+ * @author Igor Franzhev :: ifranzhev@gmail.com
+ */
 class Model
 {
 
-  // Singleton instance
+  /**
+   * Singleton instance
+   */
   protected static $instance;
 
   /**
@@ -22,6 +29,9 @@ class Model
     return self::$instance;
   }
 
+  /**
+   * Load all models from models' dir
+   */
   function initModels()
   {
     $dirname = Router::getAppPath().'/models/';

@@ -2,10 +2,22 @@
 
 namespace Common;
 
+/**
+ * Dispatcher uses the information from 
+ * the Routing step to actually generate the resource
+ * 
+ * @author Igor Franzhev :: ifranzhev@gmail.com
+ */
 class Dispatcher
 {
+  /**
+   * Router instance
+   */
   private $router;
-  // Singleton instance
+  
+  /** 
+   * Singleton instance
+   */
   protected static $instance;
 
   function __construct(\Common\Router $router)
@@ -32,6 +44,10 @@ class Dispatcher
     return self::$instance;
   }
 
+  /** 
+   * Dispatcher main method to call an action of 
+   * controller
+   */
   function handle()
   {
     $request = Request::getInstance();

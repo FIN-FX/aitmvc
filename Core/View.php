@@ -4,11 +4,27 @@ namespace Core;
 
 use \Common\Router as Router;
 
+/**
+ * Main View class which checks
+ * and render templates
+ *
+ * @author Igor Franzhev :: ifranzhev@gmail.com
+ */
 class View
 {
+  /**
+   * Type of rendering (html, json)
+   */
   private $renderType;
+
+  /**
+   * Rendering template
+   */
   private $template;
-  // Singleton instance
+
+  /**
+   * Singleton instance
+   */
   protected static $instance;
 
   function __construct()
@@ -17,7 +33,7 @@ class View
   }
 
   /**
-   * Abstract Singleton Factory method.
+   * Singleton Factory method.
    * 
    * @return the Singleton instance of Model
    */
@@ -39,6 +55,9 @@ class View
     $this->template = $templateName;
   }
 
+  /**
+   * Checks if template exists
+   */
   function checkTemplate()
   {
     $filename = Router::getAppPath().'/views/'.$this->template.'.html';
@@ -47,6 +66,12 @@ class View
     return false;
   }
 
+  /**
+   * Renders template with current
+   * parameters
+   *
+   * @param array $params
+   */
   function render($params)
   {
     switch($this->renderType)

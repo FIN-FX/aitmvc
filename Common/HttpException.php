@@ -2,11 +2,30 @@
 
 namespace Common;
 
+/**
+ * Custom Exception handler which generates
+ * an HTML page with error description
+ *
+ * @author Igor Franzhev :: ifranzhev@gmail.com
+ */
 class HttpException extends \Exception
 {
+  /**
+   * Code of error
+   */
   private $statusCode;
+
+  /**
+   * Error description
+   */
   private $error;
 
+  /**
+   * Constructor
+   * 
+   * @param integer $statusCode code of error
+   * @param string $error error description
+   */
   function __construct($statusCode, $error)
   {
     if (!empty($statusCode) && !empty($error))
@@ -20,6 +39,10 @@ class HttpException extends \Exception
     }
   }
 
+  /**
+   * Method renders error template 
+   * with description
+   */
   function render()
   {
     $data = [

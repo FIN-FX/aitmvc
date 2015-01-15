@@ -2,13 +2,37 @@
 
 namespace Common;
 
+/**
+ * Class contains attributes and methods 
+ * that are the object of the received request
+ *
+ * @author Igor Franzhev :: ifranzhev@gmail.com
+ */
 class Request
 {
+  /**
+   * HTTP request type
+   */
   private $method;
+
+  /**
+   * Name of controller
+   */
   private $controller;
+
+  /**
+   * Name of action
+   */
   private $action;
+
+  /**
+   * Request parameters
+   */
   private $params;
-  // Singleton instance
+
+  /**
+   * Singleton instance
+   */
   protected static $instance;
 
   function __construct()

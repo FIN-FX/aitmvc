@@ -4,9 +4,17 @@ namespace Core;
 
 use \Common\Router as Router;
 
+/**
+ * Main Controller class which manages
+ * views, models and actions
+ *
+ * @author Igor Franzhev :: ifranzhev@gmail.com
+ */
 class Controller
 {
-  // Singleton instance
+  /**
+   * Singleton instance
+   */
   protected static $instance;
 
   /**
@@ -21,6 +29,14 @@ class Controller
     return self::$instance;
   }
 
+  /**
+   * Method inits model's classes and 
+   * calls actions of developer controllers
+   * 
+   * @param string $controllerName controller to call
+   * @param string $actionName action to call
+   * @param array $params array of parameters
+   */
   function getAction($controllerName, $actionName, $params)
   {
     $filename = Router::getAppPath().'/controllers/'.ucfirst($controllerName).'Controller.php';
