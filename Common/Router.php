@@ -9,29 +9,58 @@ class Router
     'post' => []
   ];
 
-  function get($pattern, callable $handler)
+  public static $appPath;
+
+  // Singleton instance
+  protected static $instance;
+
+  /**
+   * Singleton Factory method.
+   * 
+   * @return the Singleton instance of Model
+   */
+  public static function getInstance()
   {
-    $this->routes['get'][$pattern] = $handler;
+    if (is_null(self::$instance)) 
+      self::$instance = new self();
+    return self::$instance;
+  }
+
+  static function setAppPath($path)
+  {
+    self::$appPath = $path;
+  }
+
+  static function getAppPath()
+  {
+    return self::$appPath;
+  }
+
+  function registerRouteGet($action)
+  {
+    $this->routes['get'][$action] = 1;
     return $this;
   }
 
-  function post($pattern, callable $handler)
+  function registerRoutePost($action)
   {
-    $this->routes['post'][$pattern] = $handler;
+    $this->routes['post'][$action] = 1;
     return $this;
   }
 
-  function match(Request $request)
+  function match(\Common\Request $request)
   {
     $method = $request->getMethod();
-    $path = $request->getPath();
+    $controller = $request->getController();
+    $action = $request->getAction();
+
     if (!empty($this->routes[$method]))
     {
       foreach($this->routes[$method] as $pattern => $handler)
       {
-        if ($pattern === $path)
+        if ($pattern === "$controller/$action")
         {
-          return $handler;
+          return true;
         }
       }
     }

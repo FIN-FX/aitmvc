@@ -2,7 +2,7 @@
 
 namespace Common;
 
-class HttpException implements \Interfaces\IHttpException
+class HttpException extends \Exception
 {
   private $statusCode;
   private $error;
@@ -20,13 +20,19 @@ class HttpException implements \Interfaces\IHttpException
     }
   }
 
-  public function getStatusCode()
+  function render()
   {
+    $data = [
+      'status' => $this->statusCode,
+      'msg' => $this->error
+    ];
 
-  }
-
-  public function getError()
-  {
-
+    $view = \Core\View::getInstance();
+    $view->setRenderType('html');
+    $view->setTemplate('error');
+    if ($view->checkTemplate())
+      $view->render($data);
+    else
+      echo 'An error has occured. Check error template is exist.';
   }
 }

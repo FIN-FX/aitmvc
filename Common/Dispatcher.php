@@ -5,8 +5,10 @@ namespace Common;
 class Dispatcher
 {
   private $router;
+  // Singleton instance
+  protected static $instance;
 
-  function __construct(\Router\Router $router)
+  function __construct(\Common\Router $router)
   {
     if (!empty($router))
     {
@@ -14,16 +16,41 @@ class Dispatcher
     }
     else
     {
-      throw new \Exception('Empty Router object');
+      throw new HttpException(500, 'Empty Router object');
     }
   }
 
-  function handle(\Request\Request $request)
+  /**
+   * Singleton Factory method.
+   * 
+   * @return the Singleton instance of Model
+   */
+  public static function getInstance()
   {
+    if (is_null(self::$instance)) 
+      self::$instance = new self();
+    return self::$instance;
+  }
+
+  function handle()
+  {
+    $request = Request::getInstance();
     $handler = $this->router->match($request);
     if (!$handler)
-      throw new \Exception('Invalid handler for request');
+      throw new HttpException(500, 'Invalid handler for request');
 
-    $handler();
+    $actionName = 'action'.ucfirst(strtolower($request->getAction()));
+    $controller = \Core\Controller::getInstance();
+    call_user_func_array(
+      [
+        $controller, 
+        'getAction'
+      ], 
+      [
+        'controllerName' => $request->getController(),
+        'actionName' => $actionName, 
+        'params' => $request->getParams()
+      ]
+    );
   }
 }

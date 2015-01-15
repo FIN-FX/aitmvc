@@ -2,16 +2,46 @@
 
 namespace Core;
 
-class Controller implements \Interfaces\IController
-{
-  function __construct()
-  {
+use \Common\Router as Router;
 
+class Controller
+{
+  // Singleton instance
+  protected static $instance;
+
+  /**
+   * Singleton Factory method.
+   * 
+   * @return the Singleton instance of Model
+   */
+  public static function getInstance()
+  {
+    if (is_null(self::$instance)) 
+      self::$instance = new self();
+    return self::$instance;
   }
 
-  function actionAddress($id)
+  function getAction($controllerName, $actionName, $params)
   {
-    var_dump($id);
-    die();
+    $filename = Router::getAppPath().'/controllers/'.ucfirst($controllerName).'Controller.php';
+    if (file_exists($filename))
+    {
+      $model = Model::getInstance();
+      $model->initModels();
+
+      require_once $filename;
+      $className = '\\'.ucfirst($controllerName).'Controller';
+      $controller = new $className();
+      call_user_func_array([$controller, $actionName], $params);
+    }
+    else
+    {
+      throw new \Common\HttpException(500, 'Create '.$controller.' controller.');
+    }
+  }
+
+  function getView()
+  {
+    return View::getInstance();
   }
 }
